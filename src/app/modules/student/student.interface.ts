@@ -32,7 +32,7 @@ export interface IStudent {
   emergencyNo: string;
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   presentAddress: string;
-  parmanentAddress: string;
+  permanentAddress: string;
   guardians: TGurdians;
   localGuardian: TLocalGurdian;
   profileImg?: string;

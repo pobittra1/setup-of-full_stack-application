@@ -5,52 +5,165 @@ import {
   TLocalGurdian,
   TStudentName,
 } from "./student.interface";
+import validator from "validator";
 
 // Define sub-schemas for nested objects
 const guardiansSchema = new Schema<TGurdians>({
-  fatherName: { type: String, required: true },
-  fatherOccupation: { type: String, required: true },
-  fatherContactNo: { type: String, required: true },
-  motherName: { type: String, required: true },
-  motherOccupation: { type: String, required: true },
-  motherContactNo: { type: String, required: true },
+  fatherName: {
+    type: String,
+    required: [true, "fatherName is required"],
+    trim: true,
+  },
+  fatherOccupation: {
+    type: String,
+    required: [true, "fatherOccupasion is required"],
+    trim: true,
+  },
+  fatherContactNo: {
+    type: String,
+    required: [true, "fatherContactNo is required"],
+    trim: true,
+  },
+  motherName: { type: String, required: [true, "motherName is required"] },
+  motherOccupation: {
+    type: String,
+    required: [true, "motherOccupasion is required"],
+    trim: true,
+  },
+  motherContactNo: {
+    type: String,
+    required: [true, "motherContactNo is required"],
+    trim: true,
+  },
 });
 
 const studentNameSchema = new Schema<TStudentName>({
-  firstName: { type: String, required: true },
-  middleName: { type: String },
-  lastName: { type: String, required: true },
+  firstName: {
+    type: String,
+    required: [true, "firstName is required"],
+    maxlength: [20, "firstName can'nt be more than 20 character"],
+    trim: true,
+    validate: {
+      validator: function (value: string) {
+        const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
+        return firstNameStr === value;
+      },
+      message: "{VALUE} is not format of capital leter",
+    },
+  },
+  middleName: { type: String, trim: true },
+  lastName: {
+    type: String,
+    required: [true, "lastName is required"],
+    trim: true,
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: "{VALUE} is not valid name",
+    },
+  },
 });
 
 const localGuardianSchema = new Schema<TLocalGurdian>({
-  name: { type: String, required: true },
-  occupation: { type: String, required: true },
-  contactNo: { type: String, required: true },
-  address: { type: String, required: true },
+  name: { type: String, required: [true, "name is required"], trim: true },
+  occupation: {
+    type: String,
+    required: [true, "occupasion is required"],
+    trim: true,
+  },
+  contactNo: {
+    type: String,
+    required: [true, "contactNo is required"],
+    trim: true,
+  },
+  address: {
+    type: String,
+    required: [true, "address is required"],
+    trim: true,
+  },
 });
 
 // Define the main student schema
 const studentSchema = new Schema<IStudent>({
-  id: { type: String },
-  name: { type: studentNameSchema },
-  gender: { type: String, enum: ["male", "female"] },
+  id: {
+    type: String,
+    required: [true, "id is required"],
+    unique: true,
+    trim: true,
+  },
+  name: {
+    type: studentNameSchema,
+    required: [true, "name is required"],
+    trim: true,
+  },
+  gender: {
+    type: String,
+    enum: {
+      values: ["male", "female", "others"],
+      message:
+        "the gender field can only be one of the folllowing 'male', 'female', 'others'",
+    },
+    trim: true,
+  },
   dateOfBirth: { type: String },
-  email: { type: String, required: true },
-  contactNo: { type: String, required: true },
-  emergencyNo: { type: String, required: true },
+  email: {
+    type: String,
+    required: [true, "email is required"],
+    unique: true,
+    trim: true,
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: "{VALUE} is not valid email",
+    },
+  },
+  contactNo: {
+    type: String,
+    required: [true, "contactNo is required"],
+    trim: true,
+  },
+  emergencyNo: {
+    type: String,
+    required: [true, "emergency is required"],
+    trim: true,
+  },
   bloodGroup: {
     type: String,
-    enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    enum: {
+      values: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      message: "{VALUE} is not any blood group",
+    },
+    trim: true,
   },
-  presentAddress: { type: String, required: true },
-  parmanentAddress: { type: String, required: true },
-  guardians: { type: guardiansSchema },
-  localGuardian: { type: localGuardianSchema },
-  profileImg: { type: String },
-  isActive: { type: String, enum: ["active", "inactive"] },
+  presentAddress: {
+    type: String,
+    required: [true, "presentAddress is required"],
+    trim: true,
+  },
+  permanentAddress: {
+    type: String,
+    required: [true, "permanentAddress is required"],
+    trim: true,
+  },
+  guardians: {
+    type: guardiansSchema,
+    required: [true, "guardians is required"],
+  },
+  localGuardian: {
+    type: localGuardianSchema,
+    required: [true, "localGuardian is required"],
+  },
+  profileImg: { type: String, trim: true },
+  isActive: {
+    type: String,
+    enum: {
+      values: ["active", "inactive"],
+      message: "{VALUE} is not status msg",
+    },
+    default: "active",
+    trim: true,
+  },
 });
 
 // Create the model from the schema
-const Student = model<IStudent>("Student", studentSchema);
+const StudentModel = model<IStudent>("Student", studentSchema);
 
-export default Student;
+export default StudentModel;
