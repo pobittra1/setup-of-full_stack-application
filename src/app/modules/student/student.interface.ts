@@ -2,10 +2,10 @@ import { Schema, model } from "mongoose";
 
 export type TGurdians = {
   fatherName: string;
-  fatherOccupasion: string;
+  fatherOccupation: string;
   fatherContactNo: string;
   motherName: string;
-  motherOccupasion: string;
+  motherOccupation: string;
   motherContactNo: string;
 };
 
@@ -23,17 +23,18 @@ export type TLocalGurdian = {
 };
 
 export interface IStudent {
+  id: string;
   name: TStudentName;
   gender: "male" | "female";
-  dateOfBirth: string;
+  dateOfBirth?: string;
   email: string;
   contactNo: string;
   emergencyNo: string;
-  bloodGroup: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   presentAddress: string;
   parmanentAddress: string;
-  guradians: TGurdians;
-  localGurdian: TLocalGurdian;
+  guardians: TGurdians;
+  localGuardian: TLocalGurdian;
   profileImg?: string;
   isActive: "active" | "inactive";
 }

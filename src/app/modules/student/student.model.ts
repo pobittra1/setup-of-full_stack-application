@@ -1,7 +1,13 @@
 import { Schema, model } from "mongoose";
+import {
+  IStudent,
+  TGurdians,
+  TLocalGurdian,
+  TStudentName,
+} from "./student.interface";
 
 // Define sub-schemas for nested objects
-const guardiansSchema = new Schema({
+const guardiansSchema = new Schema<TGurdians>({
   fatherName: { type: String, required: true },
   fatherOccupation: { type: String, required: true },
   fatherContactNo: { type: String, required: true },
@@ -10,13 +16,13 @@ const guardiansSchema = new Schema({
   motherContactNo: { type: String, required: true },
 });
 
-const studentNameSchema = new Schema({
+const studentNameSchema = new Schema<TStudentName>({
   firstName: { type: String, required: true },
   middleName: { type: String },
   lastName: { type: String, required: true },
 });
 
-const localGuardianSchema = new Schema({
+const localGuardianSchema = new Schema<TLocalGurdian>({
   name: { type: String, required: true },
   occupation: { type: String, required: true },
   contactNo: { type: String, required: true },
@@ -24,7 +30,7 @@ const localGuardianSchema = new Schema({
 });
 
 // Define the main student schema
-const studentSchema = new Schema({
+const studentSchema = new Schema<IStudent>({
   id: { type: String },
   name: { type: studentNameSchema },
   gender: { type: String, enum: ["male", "female"] },
@@ -45,6 +51,6 @@ const studentSchema = new Schema({
 });
 
 // Create the model from the schema
-const Student = model("Student", studentSchema);
+const Student = model<IStudent>("Student", studentSchema);
 
 export default Student;
