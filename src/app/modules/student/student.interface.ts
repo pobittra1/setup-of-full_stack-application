@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, Types, model } from "mongoose";
 
 export type TGurdians = {
   fatherName: string;
@@ -11,7 +11,7 @@ export type TGurdians = {
 
 export type TStudentName = {
   firstName: string;
-  middleName: string;
+  middleName?: string;
   lastName: string;
 };
 
@@ -24,8 +24,10 @@ export type TLocalGurdian = {
 
 export interface IStudent {
   id: string;
+  user: Types.ObjectId;
+  password: string;
   name: TStudentName;
-  gender: "male" | "female";
+  gender: "male" | "female" | "others";
   dateOfBirth?: string;
   email: string;
   contactNo: string;
@@ -36,5 +38,22 @@ export interface IStudent {
   guardians: TGurdians;
   localGuardian: TLocalGurdian;
   profileImg?: string;
-  isActive: "active" | "inactive";
+  isDeleted: boolean;
 }
+
+//for creating static
+
+export interface StudentModel extends Model<IStudent> {
+  isUserExists(id: string): Promise<IStudent | null>;
+}
+
+//for creating instance
+// export type TStudentMethods = {
+//   isUserExists(id: string): Promise<IStudent | null>;
+// };
+
+// export type StudentModel = Model<
+//   IStudent,
+//   Record<string, never>,
+//   TStudentMethods
+// >;

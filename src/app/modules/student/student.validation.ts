@@ -36,6 +36,7 @@ const localGuardianJoiSchema = Joi.object({
 // Define the main Joi schema for student
 const studentJoiSchema = Joi.object({
   id: Joi.string().trim().required().label("ID"),
+  password: Joi.string().trim().required(),
   name: studentNameJoiSchema.required().label("Name"),
   gender: Joi.string().trim().valid("male", "female", "others").label("Gender"),
   dateOfBirth: Joi.string().label("Date of Birth"),
