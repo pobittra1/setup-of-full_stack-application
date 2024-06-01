@@ -11,5 +11,6 @@ router.post(
   ),
   academicSemesterController.createAcademicSemester
 );
+router.get("/", academicSemesterController.getAllAcademicSemesters);
 
 export const academicSemesterRoutes = router;
