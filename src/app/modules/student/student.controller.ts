@@ -1,24 +1,25 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { studentService } from "./student.service";
-import StudentZodSchema from "./student.zod_validation";
 import { IStudent } from "./student.interface";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
+import { StudentValidations } from "./student.zod_validation";
 
-const createStudent = catchAsync(async (req, res, next) => {
+const createStudent = catchAsync(async (req, res) => {
   //create a schema validation using zod
 
   const { student: studentData } = req.body;
   //const zodParseData = StudentZodSchema.safeParse(studentData);
-  const zodParseData = StudentZodSchema.parse(studentData);
+  const zodParseData =
+    StudentValidations.createStudentValidationSchema.parse(studentData);
   //console.log(zodParseData);
   //destructure zod parse data
   //const { success, data } = zodParseData;
   //console.log(data);
   // //joi object schema
   // const { error, value } = studentJoiSchema.validate(studentData);
-  const result = await studentService.createStudentIntoDB(zodParseData);
+  const result = await studentService.createStudentIntoDB(studentData);
 
   // if (error) {
   //   res.status(500).json({
@@ -36,7 +37,7 @@ const createStudent = catchAsync(async (req, res, next) => {
   });
 });
 
-const getAllStudents = catchAsync(async (req, res, next) => {
+const getAllStudents = catchAsync(async (req, res) => {
   const result = await studentService.getAllStudentsFromDB();
   // console.log(result);
   res.status(200).json({
@@ -57,7 +58,7 @@ const getSingleStudent = catchAsync(async (req, res, next) => {
   });
 });
 
-const deleteStudent = catchAsync(async (req, res, next) => {
+const deleteStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await studentService.deleteSingleStudentFromDB(studentId);
   sendResponse(res, {

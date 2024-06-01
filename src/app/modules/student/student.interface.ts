@@ -1,4 +1,4 @@
-import { Model, Schema, Types, model } from "mongoose";
+import { Date, Model, Schema, Types, model } from "mongoose";
 
 export type TGurdians = {
   fatherName: string;
@@ -28,7 +28,7 @@ export interface IStudent {
   password: string;
   name: TStudentName;
   gender: "male" | "female" | "others";
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
   email: string;
   contactNo: string;
   emergencyNo: string;

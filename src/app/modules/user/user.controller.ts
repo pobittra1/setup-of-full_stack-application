@@ -5,7 +5,7 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import catchAsync from "../../utils/catchAsync";
 
-const createStudent = catchAsync(async (req, res, next) => {
+const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
   //create a newUser object
   const userData: Partial<TUser> = {};
