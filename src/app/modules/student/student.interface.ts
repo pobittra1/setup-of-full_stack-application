@@ -38,6 +38,7 @@ export interface IStudent {
   guardians: TGurdians;
   localGuardian: TLocalGurdian;
   profileImg?: string;
+  admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 }
 

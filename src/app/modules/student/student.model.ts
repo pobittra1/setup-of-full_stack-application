@@ -160,6 +160,10 @@ const studentSchema = new Schema<IStudent, StudentModel>(
       required: [true, "localGuardian is required"],
     },
     profileImg: { type: String, trim: true },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicSemester",
+    },
     isDeleted: {
       type: Boolean,
       default: false,

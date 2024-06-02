@@ -27,12 +27,11 @@ const LocalGuardianValidationSchema = z.object({
 // Define the main student schema
 const createStudentValidationSchema = z.object({
   body: z.object({
-    user: z.custom<mongoose.Types.ObjectId>(mongoose.Types.ObjectId.isValid),
     password: z.string(),
     student: z.object({
       name: StudentNameValidationSchema,
       gender: z.enum(["male", "female", "others"]),
-      dateOfBirth: z.date().optional(),
+      dateOfBirth: z.string().optional(),
       email: z.string().email(),
       contactNo: z.string().min(1),
       emergencyNo: z.string().min(1),
@@ -43,6 +42,7 @@ const createStudentValidationSchema = z.object({
       permanentAddress: z.string().min(1),
       guardians: GuardiansValidationSchema,
       localGuardian: LocalGuardianValidationSchema,
+      admissionSemester: z.string(),
       profileImg: z.string().optional(),
     }),
   }),
