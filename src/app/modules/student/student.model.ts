@@ -7,6 +7,8 @@ import {
   TStudentName,
 } from "./student.interface";
 import validator from "validator";
+import AppError from "../../config/error/AppError";
+import httpStatus from "http-status";
 
 // Define sub-schemas for nested objects
 const guardiansSchema = new Schema<TGurdians>({
@@ -211,6 +213,19 @@ studentSchema.statics.isUserExists = async function (id: string) {
 // });
 
 // Create the model from the schema
+
+//error handling for not existing id
+/*studentSchema.pre("findOneAndUpdate", async function (next) {
+  const query = this.getQuery();
+  const data = await Student.findOne(query);
+  if (!data) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "not found this student or not exists"
+    );
+  }
+  next();
+});*/
 const Student = model<IStudent, StudentModel>("Student", studentSchema);
 
 export default Student;
