@@ -3,3 +3,9 @@ export type TEroorSource = {
   path: string | number;
   message: string;
 }[];
+
+export type TGenericsErrorResponse = {
+  statusCode: number;
+  message: string;
+  errorSources: TEroorSource;
+};

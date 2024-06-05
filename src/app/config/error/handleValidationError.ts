@@ -1,13 +1,9 @@
 import mongoose from "mongoose";
-import { TEroorSource } from "../../interface/error";
+import { TEroorSource, TGenericsErrorResponse } from "../../interface/error";
 
-type TGenericsErrorResponse = {
-  statusCode: number;
-  message: string;
-  errorSources: TEroorSource;
-};
-
-const handleValidationError = (err: mongoose.Error.ValidationError) => {
+const handleValidationError = (
+  err: mongoose.Error.ValidationError
+): TGenericsErrorResponse => {
   const errorSources: TEroorSource = Object.values(err.errors).map(
     (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
       return {
@@ -18,9 +14,8 @@ const handleValidationError = (err: mongoose.Error.ValidationError) => {
   );
 
   const statusCode = 400;
-  const some = "something";
+
   return {
-    some,
     statusCode,
     message: "validation error",
     errorSources,

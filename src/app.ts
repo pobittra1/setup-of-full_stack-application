@@ -19,7 +19,8 @@ app.use(cors());
 //aplication routers
 app.use("/api/v1", router);
 
-const test: RequestHandler = (req, res) => {
+const test: RequestHandler = async (req, res) => {
+  //Promise.reject();
   const a = 10;
   res.send(a);
 };

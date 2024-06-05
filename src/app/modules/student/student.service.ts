@@ -20,7 +20,7 @@ const createStudentIntoDB = async (studentData: IStudent) => {
   return result;
 };
 
-const getAllStudentsFromDB = async () => {
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   const result = await Student.find()
     .populate("admissionSemester")
     .populate({
