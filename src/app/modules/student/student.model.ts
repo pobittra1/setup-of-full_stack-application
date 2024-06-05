@@ -185,7 +185,7 @@ const studentSchema = new Schema<IStudent, StudentModel>(
 //create virtual
 studentSchema.virtual("fullName").get(function () {
   //const { firstName, middleName, lastName } = this.name; how to declare type in object
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
 });
 
 //query middleware

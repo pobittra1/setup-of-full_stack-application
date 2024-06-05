@@ -4,6 +4,8 @@ import Student from "./student.model";
 import AppError from "../../config/error/AppError";
 import { User } from "../user/user.model";
 import httpStatus from "http-status";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { studentSearchableFields } from "./student.constant";
 
 const createStudentIntoDB = async (studentData: IStudent) => {
   //call static method
@@ -21,7 +23,33 @@ const createStudentIntoDB = async (studentData: IStudent) => {
 };
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  const result = await Student.find()
+  //---------raw queryBuilder-------------
+  /*
+  const queryObj = { ...query }; //copy from query for another query data
+  // HOW OUR FORMAT SHOULD BE FOR PARTIAL MATCH  :
+  //{ email: { $regex : query.searchTerm , $options: i}}
+  //{ presentAddress: { $regex : query.searchTerm , $options: i}}
+  //{ 'name.firstName': { $regex : query.searchTerm , $options: i}}
+  const studentSearchableFields = ["email", "name.firstName", "presentAddress"];
+  let searchTerm = "";
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm as string;
+  }
+  const searchQuery = Student.find({
+    $or: studentSearchableFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: "i" },
+    })),
+  });
+
+  //filtering
+  const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
+  excludeFields.forEach((el) => delete queryObj[el]);
+  console.log({ query }, { queryObj });
+  //console.log({ query, queryObj });
+
+  //chaining here
+  const filterQuery = searchQuery
+    .find(queryObj)
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -29,6 +57,61 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
         path: "academicFaculty",
       },
     });
+
+  let sort = "createdAt";
+  //sorting
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+  //chaining here
+  const sortQuery = filterQuery.sort(sort);
+
+  //by default limit is 1
+  let page = 1;
+  let limit = 1;
+  let skip = 0;
+  //limiting
+  if (query.limit) {
+    limit = Number(query.limit);
+  }
+  //pagination
+  if (query.page) {
+    page = Number(query.page);
+    skip = (page - 1) * limit;
+  }
+  const paginateQuery = sortQuery.skip(skip);
+
+  const limitQuery = paginateQuery.limit(limit);
+
+  //field filtering
+  let fields = "-__v"; //that means - is separate by __v
+  if (query.fields) {
+    //fields: "name,email"; converted should be fields: "name email"; //space between name and email
+    fields = (query.fields as string).split(",").join(" ");
+    console.log({ fields });
+  }
+  const fieldFilteringQuery = await limitQuery.select(fields);
+  return fieldFilteringQuery;
+  */
+
+  const studentQuery = new QueryBuilder(
+    Student.find()
+      .populate("admissionSemester")
+      .populate({
+        path: "academicDepartment",
+        populate: {
+          path: "academicFaculty",
+        },
+      }),
+    query
+  )
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await studentQuery.modelQuery;
   return result;
 };
 
