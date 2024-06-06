@@ -14,11 +14,11 @@ const {
 } = studentController;
 
 router.get("/", getAllStudents);
-router.get("/:studentId", getSingleStudent);
+router.get("/:id", getSingleStudent);
 router.patch(
-  "/:studentId",
+  "/:id",
   validateRequest(updateStudentValidationSchema),
   updateStudent
 );
-router.delete("/:studentId", deleteStudent);
+router.delete("/:id", deleteStudent);
 export const studentRoutes = router;
