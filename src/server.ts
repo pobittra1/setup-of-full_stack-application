@@ -14,7 +14,7 @@ async function main() {
   try {
     //var prob = 10;
     server = app.listen(port, () => {
-      console.log(`my app listening on port ${config.port}`);
+      console.log(`PH-university app is running on port ${config.port}`);
     });
   } catch (err) {
     console.log(err);
