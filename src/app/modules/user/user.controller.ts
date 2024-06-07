@@ -5,7 +5,6 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import catchAsync from "../../utils/catchAsync";
 import { TAcademicSemester } from "../academicSemester/academicSemester.Interface";
-import { academicSemester } from "../academicSemester/academicSemester.model";
 import sendResponse from "../../utils/sendResponse";
 import { userService } from "./user.service";
 import httpStatus from "http-status";

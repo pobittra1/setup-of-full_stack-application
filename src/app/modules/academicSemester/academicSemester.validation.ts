@@ -3,7 +3,6 @@ import {
   academicSemesterSchemaCode,
   academicSemesterSchemaName,
 } from "./academicSemester.constant";
-import { academicSemester } from "./academicSemester.model";
 import { z } from "zod";
 
 const createAcademicSemesterValidationSchema = z.object({

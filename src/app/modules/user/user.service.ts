@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import config from "../../config";
 import { TAcademicSemester } from "../academicSemester/academicSemester.Interface";
-import { academicSemester } from "../academicSemester/academicSemester.model";
 import { IStudent } from "../student/student.interface";
 import Student from "../student/student.model";
 import { TUser } from "./user.interface";
@@ -17,6 +16,7 @@ import { TFaculty } from "../Faculty/faculty.interface";
 import { AcademicDepartment } from "../academicDepartment/academicDepartment.model";
 import { Faculty } from "../Faculty/faculty.model";
 import { Admin } from "../Admin/admin.model";
+import { AcademicSemester } from "../academicSemester/academicSemester.model";
 
 const createStudentIntoDB = async (password: string, payload: IStudent) => {
   // create a user object
@@ -29,7 +29,7 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
   userData.role = "student";
 
   // find academic semester info
-  const admissionSemester = await academicSemester.findById(
+  const admissionSemester = await AcademicSemester.findById(
     payload.admissionSemester
   );
 

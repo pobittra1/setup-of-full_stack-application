@@ -40,7 +40,7 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
 
 //pre hook middleware for dont create same semester in same year
 academicSemesterSchema.pre("save", async function (next) {
-  const isSemesterExits = await academicSemester.findOne({
+  const isSemesterExits = await AcademicSemester.findOne({
     year: this.year,
     name: this.name,
   });
@@ -50,7 +50,7 @@ academicSemesterSchema.pre("save", async function (next) {
   next();
 });
 
-export const academicSemester = model<TAcademicSemester>(
+export const AcademicSemester = model<TAcademicSemester>(
   "AcademicSemester",
   academicSemesterSchema
 );
