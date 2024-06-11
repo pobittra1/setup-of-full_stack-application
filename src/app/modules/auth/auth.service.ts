@@ -3,6 +3,8 @@ import httpStatus from "http-status";
 import AppError from "../../config/error/AppError";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
+import jwt from "jsonwebtoken";
+import config from "../../config";
 
 const loginUser = async (payload: TLoginUser) => {
   /* -----------using normal validation checking on service-------------
@@ -56,8 +58,30 @@ const loginUser = async (payload: TLoginUser) => {
   //checking if the password is correct
   if (!(await User.isPasswordMatched(payload?.password, user?.password)))
     throw new AppError(httpStatus.FORBIDDEN, "Password do not matched");
+
+  //create token and send to the client
+  const jwtPayload = {
+    userId: user.id,
+    role: user.role,
+  };
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: "10d",
+  });
+  return {
+    accessToken,
+    needsPasswordChange: user?.needsPasswordChange,
+  };
+};
+
+const changePassword = () => {
+  // const result =   await User.findOneAndUpdate(
+  //   {
+  //     id: userData.userId,
+  //     role: userData.role,
+  //   },
 };
 
 export const authService = {
   loginUser,
+  changePassword,
 };

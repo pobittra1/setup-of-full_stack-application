@@ -1,4 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 
 //higher order function for no repeat try catch block
 const catchAsync = (fn: RequestHandler) => {

@@ -16,6 +16,7 @@ const getSingleFaculty = catchAsync(async (req, res) => {
 });
 
 const getAllFaculties = catchAsync(async (req, res) => {
+  //console.log("testing", req.user); //here i can access user from req using auth middleware.
   const result = await facultyService.getAllFacultiesFromDB(req.query);
 
   sendResponse(res, {
