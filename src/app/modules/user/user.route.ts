@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import { userController } from "./user.controller";
 import { StudentValidations } from "../student/student.zod_validation";
 import validateRequest from "../../middlewares/validateRequest";

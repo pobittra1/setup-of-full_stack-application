@@ -7,8 +7,6 @@ import {
   TStudentName,
 } from "./student.interface";
 import validator from "validator";
-import AppError from "../../config/error/AppError";
-import httpStatus from "http-status";
 
 // Define sub-schemas for nested objects
 const guardiansSchema = new Schema<TGurdians>({

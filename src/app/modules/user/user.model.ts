@@ -46,6 +46,7 @@ const userSchema = new Schema<TUser, UserModel>(
 //pre save middleware/hook: will work on create(), save()
 userSchema.pre("save", async function (next) {
   //hashing password and save into db
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(
     user.password,
@@ -79,6 +80,14 @@ userSchema.static(
     return await bcrypt.compare(plainTextPassword, hashedPassword);
   }
 );
+userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+  passwordChangedTimestamp: Date,
+  jwtIssuedTimestamp: number
+) {
+  const passwordChangedTime =
+    new Date(passwordChangedTimestamp).getTime() / 1000;
+  return passwordChangedTime > jwtIssuedTimestamp;
+};
 
 //create model for user
 export const User = model<TUser, UserModel>("User", userSchema);
