@@ -1,0 +1,21 @@
+import nodemailer from "nodemailer";
+import config from "../config";
+export const sendEmail = async (to: string, html: string) => {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: config.NODE_ENV === "production", // Use `true` for port 465, `false` for all other ports
+    auth: {
+      user: "pobittrachandraroy2001@gmail.com",
+      pass: "trfd jtku gofy agae",
+    },
+  });
+
+  await transporter.sendMail({
+    from: '"pobittrachandraroy2001@gmail.com', // sender address
+    to, // list of receivers
+    subject: "reset your password within 10 min's", // Subject line
+    text: "", // plain text body
+    html, // html body
+  });
+};
