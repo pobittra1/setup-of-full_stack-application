@@ -1,10 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import config from "../../config";
-import Student from "../student/student.model";
-import { TUser } from "./user.interface";
-import { User } from "./user.model";
 import catchAsync from "../../utils/catchAsync";
-import { TAcademicSemester } from "../academicSemester/academicSemester.Interface";
 import sendResponse from "../../utils/sendResponse";
 import { userService } from "./user.service";
 import httpStatus from "http-status";
@@ -47,9 +41,39 @@ const createAdmin = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getMe = catchAsync(async (req, res) => {
+  // const token = req.headers.authorization;
+  // if (!token) {
+  //   throw new AppError(httpStatus.NOT_FOUND, "Token not found !");
+  // }
+  const { userId, role } = req.user;
+  const result = await userService.getMe(userId, role);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User is retrieved succesfully",
+    data: result,
+  });
+});
+
+const changeStatus = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await userService.changeStatus(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Status is updated succesfully",
+    data: result,
+  });
+});
 
 export const userController = {
   createStudent,
   createFaculty,
   createAdmin,
+  getMe,
+  changeStatus,
 };
