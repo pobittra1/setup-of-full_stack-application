@@ -5,9 +5,13 @@ import { enrolledCourseController } from "./enrolledCourse.controller";
 import { EnrolledCourseValidations } from "./enrolledCourse.validation";
 
 //destructure controllers
-const { createEnrolledCourse } = enrolledCourseController;
+const { createEnrolledCourse, updateEnrolledCourseMarks } =
+  enrolledCourseController;
 //destructure validations
-const { createEnrolledCourseValidationZodSchema } = EnrolledCourseValidations;
+const {
+  createEnrolledCourseValidationZodSchema,
+  updateEnrolledCourseMarksValidationZodSchema,
+} = EnrolledCourseValidations;
 const router = express.Router();
 
 router.post(
@@ -15,6 +19,13 @@ router.post(
   auth("student"),
   validateRequest(createEnrolledCourseValidationZodSchema),
   createEnrolledCourse
+);
+
+router.patch(
+  "/update-enrolled-course-marks",
+  auth("faculty"),
+  validateRequest(updateEnrolledCourseMarksValidationZodSchema),
+  updateEnrolledCourseMarks
 );
 
 export const enrolledCourseRoute = router;

@@ -12,7 +12,8 @@ declare global {
   }
 }
 //destructure services
-const { createEnrolledCourseIntoDB } = enrolledCourseService;
+const { createEnrolledCourseIntoDB, updateEnrolledCourseMarksIntoDB } =
+  enrolledCourseService;
 
 const createEnrolledCourse = catchAsync(async (req, res) => {
   const userId = req.user.userId;
@@ -26,6 +27,18 @@ const createEnrolledCourse = catchAsync(async (req, res) => {
   });
 });
 
+const updateEnrolledCourseMarks = catchAsync(async (req, res) => {
+  const facultyId = req.user.userId;
+  const result = await updateEnrolledCourseMarksIntoDB(facultyId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Marks is updated succesfully",
+    data: result,
+  });
+});
+
 export const enrolledCourseController = {
   createEnrolledCourse,
+  updateEnrolledCourseMarks,
 };
