@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { z } from "zod";
 
 // Define sub-schemas for nested objects
@@ -27,7 +26,7 @@ const LocalGuardianValidationSchema = z.object({
 // Define the main student schema
 const createStudentValidationSchema = z.object({
   body: z.object({
-    password: z.string(),
+    password: z.string().optional(),
     student: z.object({
       name: StudentNameValidationSchema,
       gender: z.enum(["male", "female", "others"]),
@@ -44,7 +43,7 @@ const createStudentValidationSchema = z.object({
       localGuardian: LocalGuardianValidationSchema,
       admissionSemester: z.string(),
       academicDepartment: z.string(),
-      profileImg: z.string().optional(),
+      // profileImg: z.string().optional(),
     }),
   }),
 });

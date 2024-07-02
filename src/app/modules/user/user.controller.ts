@@ -5,8 +5,12 @@ import httpStatus from "http-status";
 
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
-
-  const result = await userService.createStudentIntoDB(password, studentData);
+  const file = req.file;
+  const result = await userService.createStudentIntoDB(
+    file,
+    password,
+    studentData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -18,8 +22,13 @@ const createStudent = catchAsync(async (req, res) => {
 
 const createFaculty = catchAsync(async (req, res) => {
   const { password, faculty: facultyData } = req.body;
+  const file = req.file;
 
-  const result = await userService.createFacultyIntoDB(password, facultyData);
+  const result = await userService.createFacultyIntoDB(
+    file,
+    password,
+    facultyData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -31,8 +40,9 @@ const createFaculty = catchAsync(async (req, res) => {
 
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin: adminData } = req.body;
+  const file = req.file;
 
-  const result = await userService.createAdminIntoDB(password, adminData);
+  const result = await userService.createAdminIntoDB(file, password, adminData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

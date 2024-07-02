@@ -18,10 +18,16 @@ import { AcademicDepartment } from "../academicDepartment/academicDepartment.mod
 import { Faculty } from "../Faculty/faculty.model";
 import { Admin } from "../Admin/admin.model";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
-const createStudentIntoDB = async (password: string, payload: IStudent) => {
+const createStudentIntoDB = async (
+  file: any,
+  password: string,
+  payload: IStudent
+) => {
   // create a user object
   const userData: Partial<TUser> = {};
+  // console.log("just file=>", file);
 
   //if password is not given , use deafult password
   userData.password = password || (config.default_pass as string);
@@ -44,6 +50,18 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
       admissionSemester as TAcademicSemester
     );
 
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+
+    //send image to cloudinary
+    // const profileImg = await sendImageToCloudinary(imageName, path); //store data in profileImg for updating profileImg in database profileImg>secure_url
+    await sendImageToCloudinary(imageName, path);
+    // console.log("from cloudinary=>", profileImg);
+    // const { secure_url } = profileImg;
+    // console.log(secure_url);
+    // const secureUrlData = profileImg.secure_url
+    //here, on the avobe line we can't set or destructure secure_url from profileImg object that why i use normal image addrees for all imgages with single link
+
     // create a user //transaction-1
     const newUser = await User.create([userData], { session });
 
@@ -55,6 +73,8 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
+    // payload.profileImg = secure_url;
+    payload.profileImg = "https://i.ibb.co/N9mMCqt/download-5.jpg";
 
     //create a student //transaction-2
     const newStudent = await Student.create([payload], { session });
@@ -71,7 +91,11 @@ const createStudentIntoDB = async (password: string, payload: IStudent) => {
   }
 };
 
-const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
+const createFacultyIntoDB = async (
+  file: any,
+  password: string,
+  payload: TFaculty
+) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -98,6 +122,10 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     //set  generated id
     userData.id = await generateFacultyId();
 
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    await sendImageToCloudinary(imageName, path);
+
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session }); // array
 
@@ -108,6 +136,8 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
+    payload.profileImg =
+      "https://i.ibb.co/H218SfC/confident-smiling-businesswoman-writing-notes-176420-16602.jpg";
 
     // create a faculty (transaction-2)
 
@@ -128,7 +158,11 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   }
 };
 
-const createAdminIntoDB = async (password: string, payload: TFaculty) => {
+const createAdminIntoDB = async (
+  file: any,
+  password: string,
+  payload: TFaculty
+) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -146,6 +180,10 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
     //set  generated id
     userData.id = await generateAdminId();
 
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    await sendImageToCloudinary(imageName, path);
+
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session });
 
@@ -156,6 +194,8 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
+    payload.profileImg =
+      "https://i.ibb.co/K6QMr2F/man-stands-front-stacks-books-library-188544-32988.jpg";
 
     // create a admin (transaction-2)
     const newAdmin = await Admin.create([payload], { session });
