@@ -122,9 +122,11 @@ const createFacultyIntoDB = async (
     //set  generated id
     userData.id = await generateFacultyId();
 
-    const imageName = `${userData.id}${payload?.name?.firstName}`;
-    const path = file?.path;
-    await sendImageToCloudinary(imageName, path);
+    //stop this 3 line causes my secure_url isn't work that why i set secure_url = profileImg = imgstr
+    //error is = [ERROR] 14:13:12 TypeError: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    // const imageName = `${userData.id}${payload?.name?.firstName}`;
+    // const path = file?.path;
+    // await sendImageToCloudinary(imageName, path);
 
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session }); // array
@@ -180,9 +182,11 @@ const createAdminIntoDB = async (
     //set  generated id
     userData.id = await generateAdminId();
 
-    const imageName = `${userData.id}${payload?.name?.firstName}`;
-    const path = file?.path;
-    await sendImageToCloudinary(imageName, path);
+    //stop this 3 line causes my secure_url isn't work that why i set secure_url = profileImg = imgstr
+    //error is = [ERROR] 14:13:12 TypeError: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    // const imageName = `${userData.id}${payload?.name?.firstName}`;
+    // const path = file?.path;
+    // await sendImageToCloudinary(imageName, path);
 
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session });
