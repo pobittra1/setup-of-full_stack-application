@@ -1,4 +1,4 @@
-import { Date, Model, Schema, Types, model } from "mongoose";
+import { Date, Model, Types } from "mongoose";
 
 export type TGurdians = {
   fatherName: string;
@@ -40,6 +40,7 @@ export interface IStudent {
   profileImg?: string;
   admissionSemester: Types.ObjectId;
   academicDepartment: Types.ObjectId;
+  academicFaculty: Types.ObjectId;
   isDeleted: boolean;
 }
 

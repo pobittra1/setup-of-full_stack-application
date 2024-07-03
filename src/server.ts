@@ -2,6 +2,7 @@ import app from "./app";
 import config from "./app/config";
 import mongoose from "mongoose";
 import { Server } from "http";
+import seedSuperAdmin from "./app/DB";
 let server: Server;
 
 //destructuring from config file
@@ -10,6 +11,8 @@ const { port, database_url } = config;
 async function main() {
   await mongoose.connect(database_url as string);
 
+  //superAdmin function here that is create super admin
+  seedSuperAdmin();
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
   try {
     //var prob = 10;

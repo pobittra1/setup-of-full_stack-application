@@ -5,7 +5,7 @@ import { academicSemesterNameCodeMapper } from "./academicSemester.constant";
 import { AcademicSemester } from "./academicSemester.model";
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
-  //for check name and code same. like Autumn = 01 , Summar = 02 .......
+  //for check name and code same. like Autumn = 01 , Summer = 02 .......
 
   //academicSemesterNameCodeMapper[Autmn] !== 01 ------------
   if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {

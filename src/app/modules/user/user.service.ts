@@ -41,6 +41,19 @@ const createStudentIntoDB = async (
     payload.admissionSemester
   );
 
+  if (!admissionSemester) {
+    throw new AppError(400, "Admission semester not found");
+  }
+
+  // find department
+  const academicDepartment = await AcademicDepartment.findById(
+    payload.academicDepartment
+  );
+
+  if (!academicDepartment) {
+    throw new AppError(400, "Aademic department not found");
+  }
+  payload.academicFaculty = academicDepartment.academicFaculty;
   const session = await mongoose.startSession();
 
   try {
@@ -50,12 +63,17 @@ const createStudentIntoDB = async (
       admissionSemester as TAcademicSemester
     );
 
-    const imageName = `${userData.id}${payload?.name?.firstName}`;
-    const path = file?.path;
+    if (file) {
+      const imageName = `${userData.id}${payload?.name?.firstName}`;
+      const path = file?.path;
 
+      //send image to cloudinary
+      const { secure_url } = await sendImageToCloudinary(imageName, path);
+      payload.profileImg = secure_url as string;
+    }
     //send image to cloudinary
     // const profileImg = await sendImageToCloudinary(imageName, path); //store data in profileImg for updating profileImg in database profileImg>secure_url
-    await sendImageToCloudinary(imageName, path);
+    //await sendImageToCloudinary(imageName, path);
     // console.log("from cloudinary=>", profileImg);
     // const { secure_url } = profileImg;
     // console.log(secure_url);
@@ -74,7 +92,7 @@ const createStudentIntoDB = async (
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
     // payload.profileImg = secure_url;
-    payload.profileImg = "https://i.ibb.co/N9mMCqt/download-5.jpg";
+    //payload.profileImg = secure_url as string;
 
     //create a student //transaction-2
     const newStudent = await Student.create([payload], { session });
@@ -115,6 +133,8 @@ const createFacultyIntoDB = async (
     throw new AppError(400, "Academic department not found");
   }
 
+  payload.academicFaculty = academicDepartment.academicFaculty;
+
   const session = await mongoose.startSession();
 
   try {
@@ -126,7 +146,17 @@ const createFacultyIntoDB = async (
     //error is = [ERROR] 14:13:12 TypeError: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
     // const imageName = `${userData.id}${payload?.name?.firstName}`;
     // const path = file?.path;
-    // await sendImageToCloudinary(imageName, path);
+    // const profileImg = await sendImageToCloudinary(imageName, path);
+    // const { secure_url } = profileImg;
+
+    if (file) {
+      const imageName = `${userData.id}${payload?.name?.firstName}`;
+      const path = file?.path;
+
+      //send image to cloudinary
+      const { secure_url } = await sendImageToCloudinary(imageName, path);
+      payload.profileImg = secure_url as string;
+    }
 
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session }); // array
@@ -138,8 +168,7 @@ const createFacultyIntoDB = async (
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
-    payload.profileImg =
-      "https://i.ibb.co/H218SfC/confident-smiling-businesswoman-writing-notes-176420-16602.jpg";
+    // payload.profileImg = secure_url;
 
     // create a faculty (transaction-2)
 
@@ -188,6 +217,14 @@ const createAdminIntoDB = async (
     // const path = file?.path;
     // await sendImageToCloudinary(imageName, path);
 
+    if (file) {
+      const imageName = `${userData.id}${payload?.name?.firstName}`;
+      const path = file?.path;
+
+      //send image to cloudinary
+      const { secure_url } = await sendImageToCloudinary(imageName, path);
+      payload.profileImg = secure_url as string;
+    }
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session });
 
@@ -198,8 +235,8 @@ const createAdminIntoDB = async (
     // set id , _id as user
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
-    payload.profileImg =
-      "https://i.ibb.co/K6QMr2F/man-stands-front-stacks-books-library-188544-32988.jpg";
+    // payload.profileImg =
+    //   "https://i.ibb.co/K6QMr2F/man-stands-front-stacks-books-library-188544-32988.jpg";
 
     // create a admin (transaction-2)
     const newAdmin = await Admin.create([payload], { session });
