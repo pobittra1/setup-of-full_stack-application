@@ -1,6 +1,3 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import config from "../../config";
-import Student from "../student/student.model";
 import catchAsync from "../../utils/catchAsync";
 import { AacademicSemesterService } from "./academicSemester.service";
 import sendResponse from "../../utils/sendResponse";
@@ -19,13 +16,16 @@ const createAcademicSemester = catchAsync(async (req, res) => {
 });
 
 const getAllAcademicSemesters = catchAsync(async (req, res) => {
-  const result = await AacademicSemesterService.getAllAcademicSemestersFromDB();
+  const result = await AacademicSemesterService.getAllAcademicSemestersFromDB(
+    req.query
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Academic semesters are retrieved successfully",
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

@@ -1,6 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
 import { studentService } from "./student.service";
-import { IStudent } from "./student.interface";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
@@ -11,8 +9,8 @@ const createStudent = catchAsync(async (req, res) => {
 
   const { student: studentData } = req.body;
   //const zodParseData = StudentZodSchema.safeParse(studentData);
-  const zodParseData =
-    StudentValidations.createStudentValidationSchema.parse(studentData);
+
+  StudentValidations.createStudentValidationSchema.parse(studentData);
   //console.log(zodParseData);
   //destructure zod parse data
   //const { success, data } = zodParseData;
@@ -44,11 +42,12 @@ const getAllStudents = catchAsync(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "get all students data successfuly",
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 
-const getSingleStudent = catchAsync(async (req, res, next) => {
+const getSingleStudent = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await studentService.getSingleStudentFromDB(id);
   sendResponse(res, {
